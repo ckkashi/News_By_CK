@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "482165644671",
+    "project_id": "newsbyck",
+    "storage_bucket": "newsbyck.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482165644671:android:6bce8fe37b2f733b318e4a",
+        "android_client_info": {
+          "package_name": "com.example.news_by_ck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "482165644671-799f7h2cn8c48fre0qqmnmavas086brv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAewc6Ag6qan7683WVLghGpQyvL_B36s-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "482165644671-799f7h2cn8c48fre0qqmnmavas086brv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

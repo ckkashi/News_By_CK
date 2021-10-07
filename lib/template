@@ -1,0 +1,32 @@
+// import 'package:flutter/material.dart';
+// import 'package:sizer/sizer.dart';
+
+// class Splash extends StatefulWidget {
+//   const Splash({ Key? key }) : super(key: key);
+
+//   @override
+//   _SplashState createState() => _SplashState();
+// }
+
+// class _SplashState extends State<Splash> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Container(
+//         width: 100.w,
+//         height: 100.h,
+//         decoration: BoxDecoration(
+//           image: DecorationImage(fit: BoxFit.cover,image: AssetImage(
+//             'assets/background.jpg',
+            
+//             )),
+//         ),
+//         child:Container(
+//         width: 100.w,
+//         height: 100.h,
+//         color: Colors.white.withOpacity(0.8),child:,
+//         ),
+//       ),
+//     );
+//   }
+// }
