@@ -23,6 +23,7 @@ class _NewsFavState extends State<NewsFav> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool _isUserLogin = false;
   bool _isLoading = false;
+  bool _nothing_found = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -64,7 +65,7 @@ class _NewsFavState extends State<NewsFav> {
        width: 100.w,
        height: 100.h,
        color: Colors.white.withOpacity(0.8),
-       child: Center(child:auth.currentUser!=null?favNewsArea():notLoginWidget(),
+       child: Center(child:auth.currentUser==null?notLoginWidget():_nothing_found?notFoundWidget():favNewsArea(),
        ),
      ),
   );
@@ -79,6 +80,11 @@ class _NewsFavState extends State<NewsFav> {
         return ListView.builder(
           itemCount: snapshot.data.length,
           itemBuilder:  (context, index) {
+                        if(!snapshot.hasData){
+                          setState(() {
+                            _nothing_found = true;
+                          });
+                        }
                         // return ListTile(
                         //   title: Text(snapshot.data[index].title),
                         // );
@@ -105,6 +111,26 @@ class _NewsFavState extends State<NewsFav> {
         SizedBox(height: 2.h,),
         Text(
           'User is not login',
+          style: GoogleFonts.ubuntu(
+            textStyle:TextStyle(
+              color: Constants.primary_color,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.normal
+            )
+          ),
+        )
+       ],
+     );
+  }
+
+  Column notFoundWidget() {
+    return Column(
+       mainAxisAlignment: MainAxisAlignment.center,
+       children: [
+        Icon(Icons.not_interested,size: 20.w,color: Constants.primary_color,),
+        SizedBox(height: 2.h,),
+        Text(
+          'Nothing Found',
           style: GoogleFonts.ubuntu(
             textStyle:TextStyle(
               color: Constants.primary_color,

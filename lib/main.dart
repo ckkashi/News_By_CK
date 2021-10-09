@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_by_ck/constants.dart';
 import 'package:news_by_ck/screens/home.dart';
+import 'package:news_by_ck/screens/news%20screens/NewsFav.dart';
 import 'package:news_by_ck/screens/shared/Loading.dart';
 import 'package:news_by_ck/screens/splash.dart';
 import 'package:news_by_ck/screens/user%20screens/login.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
             '/fbconnectivity':(context)=>Fb_connectivity(),
             '/login':(context)=>Login(),
             '/register':(context)=>Register(),
+            '/newsfav':(context)=>NewsFav(),
           },
         );
       },

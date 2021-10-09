@@ -5,6 +5,7 @@ import 'package:news_by_ck/Models/FavNewsModel.dart';
 import 'package:news_by_ck/Models/News.dart';
 import 'package:news_by_ck/Models/NewsModel.dart';
 import 'package:news_by_ck/constants.dart';
+import 'package:news_by_ck/screens/shared/Loading.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -21,17 +22,23 @@ class FavNewsDetail extends StatelessWidget {
 
   Future delFavNews(BuildContext context) async {
     Uri uri = Uri.parse('https://news-by-ck-server.herokuapp.com/favNews/deleteFavNews');
-    var res = await http.post(uri, body: {
+    print(data.id);
+    try{
+      var res = await http.post(uri, body: {
       
-        "docId":data.docId.toString()
+        "docId":data.id
       
     }, headers: {
       "Accept": "application/json",
       "Access_Control_Allow_Origin": "*"
     });
+    Navigator.pushReplacementNamed(context, '/home');
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
             content: Text(res.body.toString())));
+    }catch(e){
+      print(e);
+    }
   }
 
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
@@ -214,11 +221,8 @@ class FavNewsDetail extends StatelessWidget {
       ),
       centerTitle: true,
       actions: [
-        // IconButton(onPressed: () {
-    
-        //     // delFavNews(context);
-         
-        // }, icon: Icon(Icons.favorite))
+        IconButton(onPressed:(){delFavNews(context);}, 
+        icon: Icon(Icons.favorite))
       ],
     );
   }

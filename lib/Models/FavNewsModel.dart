@@ -1,5 +1,5 @@
 class FavNewsModel {
-  String? docId;
+  String? id;
   String? userId;
   String? author;
   String? title;
@@ -9,19 +9,31 @@ class FavNewsModel {
   String? publishedAt;
   String? content;
 
-  FavNewsModel(
-      {this.docId,
-      this.userId,
-      this.author,
-      this.title,
-      this.description,
-      this.url,
-      this.urlToImage,
-      this.publishedAt,
-      this.content});
+  // FavNewsModel(
+  //     {this._id,
+  //     this.userId,
+  //     this.author,
+  //     this.title,
+  //     this.description,
+  //     this.url,
+  //     this.urlToImage,
+  //     this.publishedAt,
+  //     this.content});
+
+  FavNewsModel(String _id,String userId,String author,String title,String description,String url,String urlToImage,String publishedAt,String content){
+    this.id = _id;
+    this.userId = userId;
+    this.author = author;
+      this.title = title;
+      this.description = description;
+      this.url = url;
+      this.urlToImage = urlToImage ;
+      this.publishedAt = publishedAt;
+      this.content = content;
+  }
 
   FavNewsModel.fromJson(Map<String, dynamic> json) {
-    userId = json['docId'];
+    id = json['_id'];
     userId = json['userId'];
     author = json['author'];
     title = json['title'];
@@ -34,7 +46,7 @@ class FavNewsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['docId'] = this.docId;
+    data['_id'] = this.id;
     data['userId'] = this.userId;
     data['author'] = this.author;
     data['title'] = this.title;
