@@ -80,11 +80,6 @@ class _NewsFavState extends State<NewsFav> {
         return ListView.builder(
           itemCount: snapshot.data.length,
           itemBuilder:  (context, index) {
-                        if(!snapshot.hasData){
-                          setState(() {
-                            _nothing_found = true;
-                          });
-                        }
                         // return ListTile(
                         //   title: Text(snapshot.data[index].title),
                         // );

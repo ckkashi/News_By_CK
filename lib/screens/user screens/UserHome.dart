@@ -21,6 +21,8 @@ class _UserHomeState extends State<UserHome> {
   FirebaseAuth auth = FirebaseAuth.instance;
   List resList = [];
 
+  String chkFieldMsg = '';
+
   final _formKey = GlobalKey<FormState>();
 
   final usernameCon = TextEditingController();
@@ -30,7 +32,9 @@ class _UserHomeState extends State<UserHome> {
   final newUserAddressCon = TextEditingController();
   final newUserContactCon = TextEditingController();
   bool _loading = false;
-  bool _fieldEnabled = false;
+  bool _fieldEnabled = true;
+  String docId = '';
+  bool _validate = false;
 
   Map<String, dynamic> userInfo = {};
 
@@ -52,6 +56,26 @@ class _UserHomeState extends State<UserHome> {
       print(userInfo);
     });
     return resList;
+  }
+
+  Future updateUserData() async{
+    Uri apiUrl = Uri.parse('https://news-by-ck-server.herokuapp.com/user/updateUserInfo');
+    var res = await http.put(
+      apiUrl,
+      body: {
+        "userId":auth.currentUser!.uid,
+        "username":newUsernameCon.text,
+        "userAddress":newUserAddressCon.text,
+        "userContact":newUserContactCon.text
+      },
+      headers: {
+        "Accept":"application/json",
+        "Access_Control_Allow_Origin":"*"
+      }
+      );
+      Navigator.pop(context);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.body.toString()),backgroundColor: Constants.primary_color,));
   }
 
   @override
@@ -184,32 +208,71 @@ class _UserHomeState extends State<UserHome> {
                                   fieldName: 'User Contact',
                                   icon: Icons.home,
                                   enabled: _fieldEnabled,),
-                              // TextButton(onPressed: (){
-                              //   showModalBottomSheet(context: context, 
-                              //   builder: (BuildContext context){
-                              //     return Container(
-                              //       width: 100.w,
-                              //       child: Padding(
-                              //         padding: const EdgeInsets.all(8.0),
-                              //         child: Column(
-                              //           mainAxisSize: MainAxisSize.max,
-                              //           children: [
-                              //             Text('Edit Profile',style: GoogleFonts.ubuntu(
-                              //               textStyle:TextStyle(
-                              //                 fontSize: 20.sp,
-                              //                 fontWeight: FontWeight.bold,
-                              //                 color: Constants.primary_color,
-                              //               )
-                              //             ),),
-                              //             dataField(con: newUsernameCon, obscure: true, fieldName: 'Enter new username', icon: Icons.person, enabled: true,),
-                              //             dataField(con: newUserContactCon, obscure: true, fieldName: 'Enter new contact no', icon: Icons.phone, enabled: true,),
-                              //             dataField(con: newUserAddressCon, obscure: true, fieldName: 'Enter new user address', icon: Icons.home, enabled: true,),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     );
-                              //   },);
-                              // }, child: Text('Edit Profile')),
+                              TextButton(onPressed: (){
+                                showModalBottomSheet(context: context, 
+                                isScrollControlled: true,
+                                builder: (BuildContext context){
+                                  return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child:   Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            SizedBox(height:5.h),
+                                            Text('Edit Profile',style: GoogleFonts.ubuntu(
+                                              textStyle:TextStyle(
+                                                fontSize: 30.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: Constants.primary_color,
+                                              )
+                                            ),),
+                                            SizedBox(height:2.h),
+                                            dataField1(con: newUsernameCon, obscure: false, fieldName: 'Enter new username', icon: Icons.person, enabled: _fieldEnabled,),
+                                            dataField1(con: newUserContactCon, obscure: false, fieldName: 'Enter new contact no', icon: Icons.phone, enabled: _fieldEnabled,),
+                                            dataField1(con: newUserAddressCon, obscure: false, fieldName: 'Enter new user address', icon: Icons.home, enabled: _fieldEnabled,),
+                                            SizedBox(height: 1.h,),
+                                            Text(chkFieldMsg),
+                                            SizedBox(height:1.h),
+                                            ElevatedButton(onPressed: (){
+                                              if(newUsernameCon.text == ''){
+                                                setState(() {
+                                                  chkFieldMsg = 'Fill all fields' ;
+                                                });
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'),backgroundColor: Constants.primary_color,));
+                                              }else{
+                                                if(newUserAddressCon.text == ''){
+                                                setState(() {
+                                                  chkFieldMsg = 'Fill all fields' ;
+                                                });
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'),backgroundColor: Constants.primary_color,));
+                                              }else{
+                                                if(newUserContactCon.text == ''){
+                                                  setState(() {
+                                                  chkFieldMsg = 'Fill all fields' ;
+                                                });
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'),backgroundColor: Constants.primary_color,));
+                                              }else{
+                                                setState(() {
+                                                  chkFieldMsg = '' ;
+                                                });
+                                                updateUserData();
+                                              }
+                                              }
+                                              }
+                                            }, child: Text(
+                                              'Update Profile',
+                                              style: GoogleFonts.ubuntu(
+                                                textStyle: TextStyle(
+                                                  fontSize: 16.sp
+                                                )
+                                              ),
+                                              ))
+                                          ],
+                                        ),
+                                      
+                                    );
+                                  
+                                },);
+                              }, child: Text('Edit Profile')),
                             ],
                           ),
                         ),
@@ -237,6 +300,7 @@ class dataField extends StatelessWidget {
   final String fieldName;
   final icon;
   final bool enabled;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -251,11 +315,64 @@ class dataField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        
         controller: con,
         cursorColor: Constants.primary_color!,
-        enabled: enabled,
+        enabled: true,
         style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 23.sp)),
         decoration: InputDecoration(
+            // errorText: enabled?'Value Can\'t Be Empty' : null,
+            suffixIcon: Icon(
+              icon,
+              color: Constants.primary_color!,
+            ),
+            contentPadding: EdgeInsets.all(15),
+            labelText: '$fieldName',
+            labelStyle:
+                TextStyle(color: Constants.primary_color!, fontSize: 16.sp),
+            border: outlineInputBorder2,
+            focusedBorder: outlineInputBorder),
+        obscureText: obscure,
+      ),
+    );
+  }
+}
+
+class dataField1 extends StatelessWidget {
+  const dataField1(      {Key? key,
+      required this.con,
+      required this.obscure,
+      required this.fieldName,
+      required this.icon,
+      required this.enabled})
+      : super(key: key);
+
+  final TextEditingController con;
+  final bool obscure;
+  final String fieldName;
+  final icon;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+
+    var outlineInputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(color: Constants.primary_color!, width: 2),
+    );
+    var outlineInputBorder2 = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(color: Constants.primary_color!, width: 1),
+    );
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: con,
+        cursorColor: Constants.primary_color!,
+        enabled: true,
+        style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 23.sp)),
+        decoration: InputDecoration(
+            // errorText: fieldError?'Value Can\'t Be Empty' : null,
             suffixIcon: Icon(
               icon,
               color: Constants.primary_color!,
